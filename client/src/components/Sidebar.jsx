@@ -6,7 +6,6 @@ import { GiWeightLiftingUp } from 'react-icons/gi';
 export default function Sidebar({ isOpen, setIsOpen }) {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-
     const handleLogout = () => { logout(); navigate('/login'); };
 
     const adminLinks = [
@@ -25,7 +24,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         { to: '/member', icon: FiHome, label: 'Dashboard' },
         { to: '/member/workout-plan', icon: GiWeightLiftingUp, label: 'Workout Plan' },
         { to: '/member/diet-plan', icon: FiHeart, label: 'Diet Plan' },
-        { to: '/member/library', icon: FiBook, label: 'Workout Library' },
+        { to: '/member/library', icon: FiBook, label: 'Library' },
+        { to: '/member/analytics', icon: FiActivity, label: 'Analytics' },
+        { to: '/member/recommendations', icon: FiGrid, label: 'Recommendations' },
         { to: '/member/payments', icon: FiDollarSign, label: 'Payments' },
         { to: '/member/profile', icon: FiUser, label: 'Profile' },
     ];
@@ -34,40 +35,139 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
     return (
         <>
-            {isOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsOpen(false)} />}
-            <aside className={`fixed top-0 left-0 h-full w-64 bg-dark-card border-r border-dark-border z-50 transform transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="p-6 border-b border-dark-border">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon to-neon-dark flex items-center justify-center font-outfit font-black text-dark text-lg">G</div>
-                        <div>
-                            <h1 className="font-outfit font-bold text-lg">GYM<span className="text-neon">PRO</span></h1>
-                            <p className="text-xs text-gray capitalize">{user?.role}</p>
-                        </div>
+            {/* Backdrop */}
+            {isOpen && (
+                <div
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 40,
+                        background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                    }}
+                    className="lg:hidden"
+                />
+            )}
+
+            {/* Sidebar */}
+            <aside
+                className={`fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                style={{
+                    width: 260,
+                    background: '#0e0e14',
+                    borderRight: '1px solid rgba(255,255,255,0.04)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
+                {/* Logo */}
+                <div style={{
+                    padding: '24px 20px',
+                    borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                }}>
+                    <div style={{
+                        width: 42, height: 42, borderRadius: 14,
+                        background: 'linear-gradient(135deg, #39FF14, #2bcc10)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontFamily: "'Outfit', sans-serif", fontWeight: 900,
+                        color: '#0b0b0f', fontSize: '1.125rem',
+                        boxShadow: '0 4px 20px rgba(57,255,20,0.2)',
+                    }}>
+                        G
+                    </div>
+                    <div>
+                        <h1 style={{
+                            fontFamily: "'Outfit', sans-serif", fontWeight: 800,
+                            fontSize: '1.125rem', color: '#fff', letterSpacing: '-0.01em',
+                        }}>
+                            GYM<span style={{ color: '#39FF14' }}>PRO</span>
+                        </h1>
+                        <p style={{
+                            fontSize: '0.7rem', color: '#555566',
+                            textTransform: 'capitalize', marginTop: 2,
+                            fontWeight: 500, letterSpacing: '0.05em',
+                        }}>{user?.role} Panel</p>
                     </div>
                 </div>
 
-                <nav className="p-4 space-y-1 flex-1">
+                {/* Navigation */}
+                <nav style={{
+                    flex: 1, padding: '16px 12px',
+                    display: 'flex', flexDirection: 'column', gap: 2,
+                    overflowY: 'auto',
+                }}>
+                    <p style={{
+                        fontSize: '0.65rem', fontWeight: 600, color: '#555566',
+                        textTransform: 'uppercase', letterSpacing: '0.1em',
+                        padding: '8px 16px 12px', marginTop: 4,
+                    }}>Navigation</p>
+
                     {links.map(({ to, icon: Icon, label }) => (
-                        <NavLink key={to} to={to} end={to === '/admin' || to === '/trainer' || to === '/member'}
+                        <NavLink
+                            key={to}
+                            to={to}
+                            end={to === '/admin' || to === '/trainer' || to === '/member'}
                             onClick={() => setIsOpen(false)}
-                            className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive ? 'bg-neon/10 text-neon border border-neon/20' : 'text-gray-text hover:bg-dark-lighter hover:text-white'}`}>
-                            <Icon size={18} />{label}
+                            className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+                        >
+                            <Icon />
+                            <span>{label}</span>
                         </NavLink>
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-dark-border">
-                    <div className="flex items-center gap-3 px-4 py-3 mb-2">
-                        <div className="w-9 h-9 rounded-full bg-dark-lighter flex items-center justify-center text-neon font-bold text-sm">
+                {/* User & Logout */}
+                <div style={{
+                    padding: '16px 12px',
+                    borderTop: '1px solid rgba(255,255,255,0.04)',
+                }}>
+                    {/* User info */}
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '10px 16px', marginBottom: 8,
+                    }}>
+                        <div style={{
+                            width: 36, height: 36, borderRadius: '50%',
+                            background: 'linear-gradient(135deg, rgba(57,255,20,0.15), rgba(57,255,20,0.05))',
+                            border: '1px solid rgba(57,255,20,0.2)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#39FF14', fontWeight: 700, fontSize: '0.8rem',
+                            fontFamily: "'Outfit', sans-serif",
+                            flexShrink: 0,
+                        }}>
                             {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                         </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{user?.name}</p>
-                            <p className="text-xs text-gray truncate">{user?.email}</p>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{
+                                fontSize: '0.8rem', fontWeight: 600, color: '#e0e0ee',
+                                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}>{user?.name}</p>
+                            <p style={{
+                                fontSize: '0.7rem', color: '#555566',
+                                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}>{user?.email}</p>
                         </div>
                     </div>
-                    <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-danger hover:bg-danger/10 transition-all w-full">
-                        <FiLogOut size={18} />Logout
+
+                    {/* Logout */}
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: 14,
+                            padding: '12px 16px', borderRadius: 12,
+                            width: '100%', border: 'none', cursor: 'pointer',
+                            background: 'rgba(255,68,102,0.06)',
+                            color: '#ff4466',
+                            fontSize: '0.875rem', fontWeight: 600,
+                            fontFamily: "'Inter', sans-serif",
+                            transition: 'all 0.25s ease',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,68,102,0.12)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,68,102,0.06)'; }}
+                    >
+                        <FiLogOut size={18} />
+                        <span>Logout</span>
                     </button>
                 </div>
             </aside>

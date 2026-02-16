@@ -17,7 +17,7 @@ export default function CountdownTimer({ expiryDate }) {
         return () => clearInterval(timer);
     }, [expiryDate]);
 
-    if (!expiryDate) return <p className="text-gray text-sm">No membership</p>;
+    if (!expiryDate) return <p style={{ color: '#555566', fontSize: '0.875rem' }}>No active membership</p>;
 
     const blocks = [
         { label: 'Days', value: timeLeft.d },
@@ -27,11 +27,28 @@ export default function CountdownTimer({ expiryDate }) {
     ];
 
     return (
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 12 }}>
             {blocks.map(({ label, value }) => (
-                <div key={label} className="bg-dark-lighter rounded-xl p-3 text-center min-w-[60px]">
-                    <p className="font-outfit font-black text-2xl text-neon">{String(value ?? 0).padStart(2, '0')}</p>
-                    <p className="text-xs text-gray">{label}</p>
+                <div key={label} style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 14,
+                    padding: '14px 12px',
+                    textAlign: 'center',
+                    minWidth: 60,
+                    flex: 1,
+                }}>
+                    <p style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontWeight: 900, fontSize: '1.5rem',
+                        color: '#39FF14',
+                        lineHeight: 1.2,
+                    }}>{String(value ?? 0).padStart(2, '0')}</p>
+                    <p style={{
+                        fontSize: '0.65rem', color: '#555566',
+                        fontWeight: 600, marginTop: 4,
+                        textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>{label}</p>
                 </div>
             ))}
         </div>

@@ -21,6 +21,8 @@ import MemberDashboard from './pages/member/MemberDashboard';
 import WorkoutPlan from './pages/member/WorkoutPlan';
 import DietPlan from './pages/member/DietPlan';
 import WorkoutLibrary from './pages/member/WorkoutLibrary';
+import FitnessAnalytics from './pages/member/FitnessAnalytics';
+import WorkoutRecommendations from './pages/member/WorkoutRecommendations';
 import PaymentHistory from './pages/member/PaymentHistory';
 import Profile from './pages/member/Profile';
 
@@ -56,6 +58,8 @@ export default function App() {
                         <Route path="workout-plan" element={<WorkoutPlan />} />
                         <Route path="diet-plan" element={<DietPlan />} />
                         <Route path="library" element={<WorkoutLibrary />} />
+                        <Route path="analytics" element={<FitnessAnalytics />} />
+                        <Route path="recommendations" element={<WorkoutRecommendations />} />
                         <Route path="payments" element={<PaymentHistory />} />
                         <Route path="profile" element={<Profile />} />
                     </Route>
