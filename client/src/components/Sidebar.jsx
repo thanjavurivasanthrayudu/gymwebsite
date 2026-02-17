@@ -6,7 +6,10 @@ import { GiWeightLiftingUp } from 'react-icons/gi';
 export default function Sidebar({ isOpen, setIsOpen }) {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const handleLogout = () => { logout(); navigate('/login'); };
+    const handleLogout = async () => {
+        await logout();
+        navigate('/login', { replace: true });
+    };
 
     const adminLinks = [
         { to: '/admin', icon: FiHome, label: 'Dashboard' },
@@ -35,27 +38,33 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
     return (
         <>
-            {/* Backdrop */}
+            {/* Backdrop — only on mobile when sidebar is open */}
             {isOpen && (
                 <div
                     onClick={() => setIsOpen(false)}
+                    className="sidebar-backdrop"
                     style={{
                         position: 'fixed', inset: 0, zIndex: 40,
                         background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
                     }}
-                    className="lg:hidden"
                 />
             )}
 
             {/* Sidebar */}
             <aside
-                className={`fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`sidebar-panel ${isOpen ? 'sidebar-open' : ''}`}
                 style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    zIndex: 50,
                     width: 260,
                     background: '#0e0e14',
                     borderRight: '1px solid rgba(255,255,255,0.04)',
                     display: 'flex',
                     flexDirection: 'column',
+                    transition: 'transform 0.3s ease',
                 }}
             >
                 {/* Logo */}
@@ -171,6 +180,29 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     </button>
                 </div>
             </aside>
+
+            <style>{`
+                /* Mobile: sidebar hidden off-screen by default */
+                .sidebar-panel {
+                    transform: translateX(-100%);
+                }
+                .sidebar-panel.sidebar-open {
+                    transform: translateX(0);
+                }
+                .sidebar-backdrop {
+                    display: block;
+                }
+
+                /* Desktop: sidebar always visible */
+                @media (min-width: 1024px) {
+                    .sidebar-panel {
+                        transform: translateX(0) !important;
+                    }
+                    .sidebar-backdrop {
+                        display: none !important;
+                    }
+                }
+            `}</style>
         </>
     );
 }

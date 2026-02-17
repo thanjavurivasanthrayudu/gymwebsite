@@ -37,61 +37,135 @@ export default function AssignPlans() {
 
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-    return (
-        <div className="space-y-6">
-            <h1 className="font-outfit font-black text-2xl">Assign Plans</h1>
+    const inputStyle = {
+        padding: '12px 16px',
+        background: '#22222e',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '12px',
+        fontSize: '0.875rem',
+        color: '#fff',
+        outline: 'none',
+        width: '100%',
+        fontFamily: "'Inter', sans-serif",
+    };
 
-            <select value={selMember} onChange={e => setSelMember(e.target.value)} className="w-full max-w-md px-4 py-3 bg-dark-lighter border border-dark-border rounded-xl text-sm text-white">
+    const smallInputStyle = {
+        padding: '8px 12px',
+        background: '#12121a',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '8px',
+        fontSize: '0.875rem',
+        color: '#fff',
+        outline: 'none',
+        width: '100%',
+        fontFamily: "'Inter', sans-serif",
+    };
+
+    return (
+        <div>
+            <h1 style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 900, fontSize: '1.5rem',
+                color: '#fff', marginBottom: '24px',
+            }}>Assign Plans</h1>
+
+            <select value={selMember} onChange={e => setSelMember(e.target.value)} style={{ ...inputStyle, maxWidth: '400px', marginBottom: '24px' }}>
                 <option value="">Select a Member</option>{members.map(m => <option key={m._id} value={m._id}>{m.name}</option>)}
             </select>
 
             {selMember && (
                 <>
-                    <div className="flex gap-2">
-                        <button onClick={() => setTab('workout')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${tab === 'workout' ? 'bg-neon text-dark' : 'bg-dark-lighter text-gray-text'}`}>Workout Plan</button>
-                        <button onClick={() => setTab('diet')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${tab === 'diet' ? 'bg-neon text-dark' : 'bg-dark-lighter text-gray-text'}`}>Diet Plan</button>
+                    {/* Tabs */}
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+                        <button onClick={() => setTab('workout')} style={{
+                            padding: '8px 16px', borderRadius: '12px', fontSize: '0.875rem', fontWeight: 500,
+                            background: tab === 'workout' ? '#39FF14' : '#22222e',
+                            color: tab === 'workout' ? '#0b0b0f' : '#b8b8cc',
+                            border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                        }}>Workout Plan</button>
+                        <button onClick={() => setTab('diet')} style={{
+                            padding: '8px 16px', borderRadius: '12px', fontSize: '0.875rem', fontWeight: 500,
+                            background: tab === 'diet' ? '#39FF14' : '#22222e',
+                            color: tab === 'diet' ? '#0b0b0f' : '#b8b8cc',
+                            border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                        }}>Diet Plan</button>
                     </div>
 
-                    {msg && <div className="p-3 bg-neon/10 border border-neon/30 rounded-xl text-neon text-sm">{msg}</div>}
+                    {msg && (
+                        <div style={{
+                            padding: '12px', background: 'rgba(57,255,20,0.1)',
+                            border: '1px solid rgba(57,255,20,0.3)', borderRadius: '12px',
+                            color: '#39FF14', fontSize: '0.875rem', marginBottom: '24px',
+                        }}>{msg}</div>
+                    )}
 
                     {tab === 'workout' && (
-                        <form onSubmit={handleAssignWorkout} className="glass p-6 space-y-4">
-                            <input value={wpForm.title} onChange={e => setWpForm(p => ({ ...p, title: e.target.value }))} className="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-xl text-sm text-white" placeholder="Plan Title" required />
-                            <div className="space-y-3">
+                        <form onSubmit={handleAssignWorkout} className="glass" style={{ padding: '24px' }}>
+                            <input value={wpForm.title} onChange={e => setWpForm(p => ({ ...p, title: e.target.value }))} style={{ ...inputStyle, marginBottom: '16px' }} placeholder="Plan Title" required />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
                                 {workouts.map(w => (
-                                    <div key={w._id} className="bg-dark-lighter rounded-xl p-4">
-                                        <p className="font-medium text-sm mb-2">{w.title} <span className="text-xs text-gray capitalize">({w.muscleGroup})</span></p>
-                                        <div className="flex flex-wrap gap-2">{days.map(d => {
-                                            const sel = wpForm.workouts.some(wp => wp.workout === w._id && wp.day === d);
-                                            return <button key={d} type="button" onClick={() => toggleWorkout(w._id, d)} className={`px-2 py-1 rounded text-xs capitalize ${sel ? 'bg-neon text-dark' : 'bg-dark-card text-gray-text'}`}>{d.slice(0, 3)}</button>;
-                                        })}</div>
+                                    <div key={w._id} style={{ background: '#22222e', borderRadius: '12px', padding: '16px' }}>
+                                        <p style={{ fontWeight: 500, fontSize: '0.875rem', color: '#e0e0ee', marginBottom: '8px' }}>
+                                            {w.title} <span style={{ fontSize: '0.75rem', color: '#555566', textTransform: 'capitalize' }}>({w.muscleGroup})</span>
+                                        </p>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                            {days.map(d => {
+                                                const sel = wpForm.workouts.some(wp => wp.workout === w._id && wp.day === d);
+                                                return (
+                                                    <button key={d} type="button" onClick={() => toggleWorkout(w._id, d)} style={{
+                                                        padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem',
+                                                        textTransform: 'capitalize', border: 'none', cursor: 'pointer',
+                                                        background: sel ? '#39FF14' : '#12121a',
+                                                        color: sel ? '#0b0b0f' : '#b8b8cc',
+                                                        transition: 'all 0.2s',
+                                                    }}>{d.slice(0, 3)}</button>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
-                            <textarea value={wpForm.notes} onChange={e => setWpForm(p => ({ ...p, notes: e.target.value }))} className="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-xl text-sm text-white" placeholder="Notes" rows={2} />
-                            <button type="submit" className="btn-neon px-6 py-2.5 text-sm">Assign Workout Plan</button>
+                            <textarea value={wpForm.notes} onChange={e => setWpForm(p => ({ ...p, notes: e.target.value }))} style={{ ...inputStyle, resize: 'vertical', minHeight: '60px', marginBottom: '16px' }} placeholder="Notes" rows={2} />
+                            <button type="submit" className="btn-neon" style={{ padding: '10px 24px', fontSize: '0.875rem' }}>Assign Workout Plan</button>
                         </form>
                     )}
 
                     {tab === 'diet' && (
-                        <form onSubmit={handleAssignDiet} className="glass p-6 space-y-4">
-                            <input value={dpForm.title} onChange={e => setDpForm(p => ({ ...p, title: e.target.value }))} className="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-xl text-sm text-white" placeholder="Diet Plan Title" required />
-                            {dpForm.meals.map((meal, i) => (
-                                <div key={i} className="bg-dark-lighter rounded-xl p-4 space-y-3">
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <input value={meal.name} onChange={e => { const m = [...dpForm.meals]; m[i].name = e.target.value; setDpForm(p => ({ ...p, meals: m })); }} className="px-3 py-2 bg-dark-card border border-dark-border rounded-lg text-sm text-white" placeholder="Meal name" />
-                                        <input value={meal.time} onChange={e => { const m = [...dpForm.meals]; m[i].time = e.target.value; setDpForm(p => ({ ...p, meals: m })); }} className="px-3 py-2 bg-dark-card border border-dark-border rounded-lg text-sm text-white" placeholder="Time" />
+                        <form onSubmit={handleAssignDiet} className="glass" style={{ padding: '24px' }}>
+                            <input value={dpForm.title} onChange={e => setDpForm(p => ({ ...p, title: e.target.value }))} style={{ ...inputStyle, marginBottom: '16px' }} placeholder="Diet Plan Title" required />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+                                {dpForm.meals.map((meal, i) => (
+                                    <div key={i} style={{ background: '#22222e', borderRadius: '12px', padding: '16px' }}>
+                                        <div className="assign-meal-grid" style={{ marginBottom: '12px' }}>
+                                            <input value={meal.name} onChange={e => { const m = [...dpForm.meals]; m[i].name = e.target.value; setDpForm(p => ({ ...p, meals: m })); }} style={smallInputStyle} placeholder="Meal name" />
+                                            <input value={meal.time} onChange={e => { const m = [...dpForm.meals]; m[i].time = e.target.value; setDpForm(p => ({ ...p, meals: m })); }} style={smallInputStyle} placeholder="Time" />
+                                        </div>
+                                        <input value={meal.items.join(', ')} onChange={e => { const m = [...dpForm.meals]; m[i].items = e.target.value.split(',').map(s => s.trim()); setDpForm(p => ({ ...p, meals: m })); }} style={{ ...smallInputStyle, marginBottom: '12px' }} placeholder="Food items (comma separated)" />
+                                        <input type="number" value={meal.calories} onChange={e => { const m = [...dpForm.meals]; m[i].calories = +e.target.value; setDpForm(p => ({ ...p, meals: m })); }} style={smallInputStyle} placeholder="Calories" />
                                     </div>
-                                    <input value={meal.items.join(', ')} onChange={e => { const m = [...dpForm.meals]; m[i].items = e.target.value.split(',').map(s => s.trim()); setDpForm(p => ({ ...p, meals: m })); }} className="w-full px-3 py-2 bg-dark-card border border-dark-border rounded-lg text-sm text-white" placeholder="Food items (comma separated)" />
-                                    <input type="number" value={meal.calories} onChange={e => { const m = [...dpForm.meals]; m[i].calories = +e.target.value; setDpForm(p => ({ ...p, meals: m })); }} className="w-full px-3 py-2 bg-dark-card border border-dark-border rounded-lg text-sm text-white" placeholder="Calories" />
-                                </div>
-                            ))}
-                            <button type="button" onClick={addMeal} className="btn-outline px-4 py-2 text-sm">+ Add Meal</button>
-                            <button type="submit" className="btn-neon px-6 py-2.5 text-sm block">Assign Diet Plan</button>
+                                ))}
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <button type="button" onClick={addMeal} className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.875rem' }}>+ Add Meal</button>
+                                <button type="submit" className="btn-neon" style={{ padding: '10px 24px', fontSize: '0.875rem' }}>Assign Diet Plan</button>
+                            </div>
                         </form>
                     )}
                 </>
             )}
+
+            <style>{`
+                .assign-meal-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                }
+                @media (max-width: 480px) {
+                    .assign-meal-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

@@ -66,6 +66,11 @@ export function AuthProvider({ children }) {
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_OUT') {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
             if (session?.user) {
                 const u = await fetchProfile(session.user);
                 setUser(u);
@@ -79,6 +84,8 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = async (email, password) => {
+        // Clear any previous user state first
+        setUser(null);
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         const u = await fetchProfile(data.user);
@@ -99,8 +106,12 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async () => {
-        await supabase.auth.signOut();
         setUser(null);
+        try {
+            await supabase.auth.signOut({ scope: 'local' });
+        } catch (e) {
+            console.error('Sign out error:', e);
+        }
     };
 
     const updateUser = (updates) => setUser(prev => prev ? { ...prev, ...updates } : prev);

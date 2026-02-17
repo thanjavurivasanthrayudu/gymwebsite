@@ -24,51 +24,148 @@ export default function AdminDashboard() {
     }, [data]);
 
     const stats = [
-        { label: 'Total Members', value: data?.totalMembers || 0, icon: FiUsers, color: 'from-neon to-neon-dark' },
-        { label: 'Total Trainers', value: data?.totalTrainers || 0, icon: FiActivity, color: 'from-info to-blue-700' },
-        { label: 'Revenue', value: `₹${(data?.totalRevenue || 0).toLocaleString()}`, icon: FiDollarSign, color: 'from-warning to-orange-700' },
-        { label: 'Workouts', value: data?.totalWorkouts || 0, icon: GiWeightLiftingUp, color: 'from-purple-500 to-purple-700' },
+        { label: 'Total Members', value: data?.totalMembers || 0, icon: FiUsers, gradient: 'linear-gradient(135deg, #39FF14, #2bcc10)' },
+        { label: 'Total Trainers', value: data?.totalTrainers || 0, icon: FiActivity, gradient: 'linear-gradient(135deg, #3b82f6, #1d4ed8)' },
+        { label: 'Revenue', value: `₹${(data?.totalRevenue || 0).toLocaleString()}`, icon: FiDollarSign, gradient: 'linear-gradient(135deg, #ffaa00, #cc7700)' },
+        { label: 'Workouts', value: data?.totalWorkouts || 0, icon: GiWeightLiftingUp, gradient: 'linear-gradient(135deg, #a855f7, #7e22ce)' },
     ];
 
     const chartData = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{ label: 'Revenue (₹)', data: [15000, 22000, 18000, 25000, 30000, data?.totalRevenue || 28000], backgroundColor: 'rgba(57, 255, 20, 0.6)', borderColor: '#39FF14', borderWidth: 1, borderRadius: 8 }]
+        datasets: [{
+            label: 'Revenue (₹)',
+            data: [15000, 22000, 18000, 25000, 30000, data?.totalRevenue || 28000],
+            backgroundColor: 'rgba(57, 255, 20, 0.6)',
+            borderColor: '#39FF14',
+            borderWidth: 1,
+            borderRadius: 8,
+        }]
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { ticks: { color: '#666' }, grid: { color: '#222' } },
+            y: { ticks: { color: '#666' }, grid: { color: '#222' } },
+        },
     };
 
     return (
-        <div ref={ref} className="space-y-6">
-            <h1 className="font-outfit font-black text-2xl">Admin Dashboard</h1>
+        <div ref={ref}>
+            <h1 style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 900,
+                fontSize: '1.5rem',
+                color: '#fff',
+                marginBottom: '24px',
+            }}>Admin Dashboard</h1>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {stats.map(({ label, value, icon: Icon, color }) => (
-                    <div key={label} className="glass glass-hover p-5">
-                        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-3`}><Icon size={20} className="text-white" /></div>
-                        <p className="text-gray text-xs uppercase tracking-wider">{label}</p>
-                        <p className="font-outfit font-black text-2xl mt-1">{value}</p>
+            {/* Stats Cards */}
+            <div className="admin-stats-grid" style={{ marginBottom: '24px' }}>
+                {stats.map(({ label, value, icon: Icon, gradient }) => (
+                    <div key={label} className="glass glass-hover" style={{ padding: '20px' }}>
+                        <div style={{
+                            width: '44px', height: '44px', borderRadius: '12px',
+                            background: gradient,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            marginBottom: '12px',
+                        }}>
+                            <Icon size={20} color="#fff" />
+                        </div>
+                        <p style={{
+                            color: '#555566', fontSize: '0.7rem',
+                            textTransform: 'uppercase', letterSpacing: '0.1em',
+                            fontWeight: 600,
+                        }}>{label}</p>
+                        <p style={{
+                            fontFamily: "'Outfit', sans-serif",
+                            fontWeight: 900, fontSize: '1.5rem',
+                            color: '#fff', marginTop: '4px',
+                        }}>{value}</p>
                     </div>
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="glass p-6">
-                    <h3 className="font-outfit font-bold text-lg mb-4">Revenue Overview</h3>
-                    <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666' }, grid: { color: '#222' } }, y: { ticks: { color: '#666' }, grid: { color: '#222' } } } }} />
+            {/* Chart + Recent Members */}
+            <div className="admin-bottom-grid">
+                {/* Chart */}
+                <div className="glass" style={{ padding: '24px' }}>
+                    <h3 style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontWeight: 700, fontSize: '1.125rem',
+                        color: '#fff', marginBottom: '16px',
+                    }}>Revenue Overview</h3>
+                    <div style={{ position: 'relative', width: '100%' }}>
+                        <Bar data={chartData} options={chartOptions} />
+                    </div>
                 </div>
 
-                <div className="glass p-6">
-                    <h3 className="font-outfit font-bold text-lg mb-4">Recent Members</h3>
-                    <div className="space-y-3">
+                {/* Recent Members */}
+                <div className="glass" style={{ padding: '24px' }}>
+                    <h3 style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontWeight: 700, fontSize: '1.125rem',
+                        color: '#fff', marginBottom: '16px',
+                    }}>Recent Members</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         {(data?.recentMembers || []).map(m => (
-                            <div key={m._id} className="flex items-center gap-3 p-3 bg-dark-lighter rounded-xl">
-                                <div className="w-9 h-9 rounded-full bg-neon/20 flex items-center justify-center text-neon font-bold text-sm">{m.name?.charAt(0)}</div>
-                                <div className="flex-1 min-w-0"><p className="text-sm font-medium truncate">{m.name}</p><p className="text-xs text-gray truncate">{m.email}</p></div>
-                                <span className="text-xs text-gray capitalize px-2 py-1 rounded-lg bg-dark-card">{m.membershipPlan || 'N/A'}</span>
+                            <div key={m._id} style={{
+                                display: 'flex', alignItems: 'center', gap: '12px',
+                                padding: '12px', background: '#22222e', borderRadius: '12px',
+                            }}>
+                                <div style={{
+                                    width: '36px', height: '36px', borderRadius: '50%',
+                                    background: 'rgba(57,255,20,0.15)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    color: '#39FF14', fontWeight: 700, fontSize: '0.875rem',
+                                    flexShrink: 0,
+                                }}>{m.name?.charAt(0)}</div>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{ fontSize: '0.875rem', fontWeight: 500, color: '#e0e0ee', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</p>
+                                    <p style={{ fontSize: '0.75rem', color: '#555566', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.email}</p>
+                                </div>
+                                <span style={{
+                                    fontSize: '0.7rem', padding: '4px 10px',
+                                    borderRadius: '8px', background: '#12121a',
+                                    color: '#555566', textTransform: 'capitalize',
+                                    flexShrink: 0,
+                                }}>{m.membershipPlan || 'N/A'}</span>
                             </div>
                         ))}
-                        {(!data?.recentMembers?.length) && <p className="text-gray text-sm text-center py-4">No members yet</p>}
+                        {(!data?.recentMembers?.length) && (
+                            <p style={{ color: '#555566', fontSize: '0.875rem', textAlign: 'center', padding: '16px 0' }}>No members yet</p>
+                        )}
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                .admin-stats-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 16px;
+                }
+                .admin-bottom-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 24px;
+                }
+                @media (min-width: 640px) {
+                    .admin-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (min-width: 1024px) {
+                    .admin-stats-grid {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                    .admin-bottom-grid {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

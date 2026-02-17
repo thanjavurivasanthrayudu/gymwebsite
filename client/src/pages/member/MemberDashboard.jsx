@@ -91,7 +91,7 @@ export default function MemberDashboard() {
                 display: 'grid',
                 gridTemplateColumns: '1fr',
                 gap: 24,
-            }} className="md:!grid-cols-2">
+            }} className="member-bottom-grid">
                 {/* Membership Status */}
                 <div style={{
                     background: 'rgba(18,18,26,0.85)',
@@ -144,7 +144,7 @@ export default function MemberDashboard() {
             {/* Responsive fix for bottom grid */}
             <style>{`
                 @media (min-width: 768px) {
-                    .md\\:!grid-cols-2 { grid-template-columns: 1fr 1fr !important; }
+                    .member-bottom-grid { grid-template-columns: 1fr 1fr !important; }
                 }
             `}</style>
         </div>
