@@ -57,7 +57,18 @@ export default function Login() {
     }
 
     return (
-        <div style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
+        <div style={{
+            minHeight: '100vh',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem 1rem',
+            backgroundImage: "url('/assets/images/ui/login-bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed'
+        }}>
             <ParticleBackground />
             <div
                 ref={cardRef}

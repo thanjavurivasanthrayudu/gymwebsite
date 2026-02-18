@@ -52,7 +52,7 @@ export default function Register() {
     }
 
     return (
-        <div className="min-h-screen relative flex items-center justify-center px-4 py-8">
+        <div className="min-h-screen relative flex items-center justify-center px-4 py-8 bg-cover bg-center bg-no-repeat bg-fixed" style={{ backgroundImage: "url('/assets/images/ui/login-bg.jpg')" }}>
             <ParticleBackground />
             <div ref={cardRef} className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 glass overflow-hidden">
                 <div className="bg-gradient-to-br from-dark-card to-dark-lighter p-8 lg:p-12 flex flex-col items-center justify-center border-r border-dark-border">

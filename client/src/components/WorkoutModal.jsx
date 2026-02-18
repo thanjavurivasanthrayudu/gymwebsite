@@ -28,17 +28,29 @@ export default function WorkoutModal({ workout, onClose }) {
                     <button onClick={handleClose} className="w-8 h-8 rounded-lg bg-dark-lighter flex items-center justify-center hover:bg-danger/20 hover:text-danger transition-colors"><FiX /></button>
                 </div>
 
-                {(workout.gifUrl || workout.videoUrl) && (
-                    <div className="px-6 pt-4">
-                        {workout.gifUrl ? (
-                            <img src={workout.gifUrl} alt={workout.title} className="w-full h-48 object-cover rounded-xl bg-dark-lighter" />
-                        ) : (
-                            <div className="w-full h-48 bg-dark-lighter rounded-xl flex items-center justify-center">
-                                <a href={workout.videoUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 btn-neon px-6 py-3"><FiPlay /> Watch Video</a>
-                            </div>
-                        )}
-                    </div>
-                )}
+                <div className="px-6 pt-4">
+                    {workout.gifUrl ? (
+                        <img src={workout.gifUrl} alt={workout.title} className="w-full h-48 object-cover rounded-xl bg-dark-lighter" />
+                    ) : (
+                        <div className="relative w-full h-48 bg-dark-lighter rounded-xl overflow-hidden">
+                            <img
+                                src={`/assets/images/exercises/${encodeURIComponent(workout.bodyPart || workout.muscleGroup || 'Chest')}/default.jpg`}
+                                alt={workout.title}
+                                className="w-full h-100 object-cover"
+                                style={{ height: '100%', width: '100%' }}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = 'none';
+                                }}
+                            />
+                            {workout.videoUrl && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/50 transition-colors">
+                                    <a href={workout.videoUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 btn-neon px-6 py-3"><FiPlay /> Watch Video</a>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
 
                 <div className="p-6 space-y-4">
                     <p className="text-gray-text text-sm">{workout.description}</p>

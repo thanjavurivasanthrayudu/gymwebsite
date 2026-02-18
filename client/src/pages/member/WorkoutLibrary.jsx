@@ -112,8 +112,39 @@ export default function WorkoutLibrary() {
                 <div onClick={() => setSelected(null)}
                     style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', padding: '1rem' }}>
                     <div onClick={e => e.stopPropagation()} className="glass" style={{ maxWidth: 500, width: '100%', padding: '2rem', position: 'relative', maxHeight: '80vh', overflow: 'auto' }}>
-                        <button onClick={() => setSelected(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', color: '#666', cursor: 'pointer' }}><FiX size={20} /></button>
-                        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', paddingRight: '2rem' }}>{selected.title}</h2>
+                        <button onClick={() => setSelected(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', color: '#666', cursor: 'pointer', zIndex: 10 }}><FiX size={20} /></button>
+
+                        {/* Exercise Image */}
+                        <div style={{
+                            width: '100%',
+                            height: '200px',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            marginBottom: '1.5rem',
+                            border: '1px solid #333',
+                            position: 'relative'
+                        }}>
+                            <img
+                                src={`/assets/images/exercises/${encodeURIComponent(selected.bodyPart)}/default.jpg`}
+                                alt={selected.title}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = 'none'; // Hide if image not found
+                                }}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }} />
+                            <h2 style={{
+                                position: 'absolute',
+                                bottom: '1rem',
+                                left: '1rem',
+                                fontFamily: "'Outfit', sans-serif",
+                                fontWeight: 800,
+                                fontSize: '1.25rem',
+                                color: '#fff',
+                                textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                            }}>{selected.title}</h2>
+                        </div>
                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem', fontSize: '0.75rem' }}>
                             <span style={{ color: '#39FF14', background: 'rgba(57,255,20,0.1)', padding: '0.25rem 0.625rem', borderRadius: '8px' }}>{selected.bodyPart}</span>
                             <span style={{ color: '#999', background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.625rem', borderRadius: '8px' }}>{selected.equipment}</span>
