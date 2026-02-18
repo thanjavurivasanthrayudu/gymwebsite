@@ -328,6 +328,45 @@ select:focus {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
+/* ─── Responsive Layout Fixes ──────────────────── */
+@media (max-width: 768px) {
+    .glass {
+        padding: 20px !important;
+    }
+
+    .dash-card {
+        min-height: 140px;
+        padding: 16px;
+    }
+
+    .dash-card-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .dash-card-label {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .glass {
+        padding: 16px !important;
+    }
+
+    h1 {
+        font-size: 1.5rem !important;
+    }
+
+    h2 {
+        font-size: 1.2rem !important;
+    }
+
+    h3 {
+        font-size: 1rem !important;
+    }
+}
+
 /* ─── Reduced Motion ───────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
 

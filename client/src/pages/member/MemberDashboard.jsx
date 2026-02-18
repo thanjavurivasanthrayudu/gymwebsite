@@ -32,121 +32,155 @@ export default function MemberDashboard() {
     ];
 
     return (
-        <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* ── Welcome Banner ── */}
-            <div style={{
-                background: 'rgba(18,18,26,0.85)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: 16,
-                padding: '28px 32px',
-                position: 'relative',
-                overflow: 'hidden',
-            }}>
+            <div className="glass p-7 md:p-9" style={{ position: 'relative', overflow: 'hidden', minHeight: '120px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 {/* Subtle gradient accent */}
                 <div style={{
                     position: 'absolute', top: 0, right: 0,
-                    width: 200, height: 200,
-                    background: 'radial-gradient(circle, rgba(57,255,20,0.06), transparent 70%)',
+                    width: 250, height: 250,
+                    background: 'radial-gradient(circle, rgba(57,255,20,0.04), transparent 70%)',
                     pointerEvents: 'none',
                 }} />
-                <h1 style={{
-                    fontFamily: "'Outfit', sans-serif",
-                    fontWeight: 900, fontSize: '1.75rem',
-                    color: '#fff', marginBottom: 6,
-                    letterSpacing: '-0.02em',
-                }}>
-                    Welcome back, <span className="gradient-text">{user?.name}</span>
-                </h1>
-                <p style={{ color: '#88889a', fontSize: '0.9rem', fontWeight: 400 }}>
-                    Here's your fitness overview for today
-                </p>
+                
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                    <h1 style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontWeight: 900, fontSize: 'clamp(1.5rem, 5vw, 2rem)',
+                        color: '#fff', marginBottom: 8,
+                        letterSpacing: '-0.02em',
+                    }}>
+                        Welcome back, <span className="gradient-text">{user?.name || 'Member'}</span>
+                    </h1>
+                    <p style={{ color: '#88889a', fontSize: '0.95rem', fontWeight: 400 }}>
+                        Here's your fitness overview for today
+                    </p>
+                </div>
             </div>
 
             {/* ── Quick Links Grid ── */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(155px, 1fr))',
-                gap: 20,
-            }}>
-                {quickLinks.map(({ to, icon: Icon, label, gradient, glow }) => (
-                    <Link
-                        key={to}
-                        to={to}
-                        className="dash-card"
-                    >
-                        <div className="dash-card-icon" style={{
-                            background: gradient,
-                            boxShadow: `0 8px 24px ${glow}`,
-                        }}>
-                            <Icon size={28} color="#fff" />
-                        </div>
-                        <span className="dash-card-label">{label}</span>
-                    </Link>
-                ))}
+            <div>
+                <h2 style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontWeight: 700, fontSize: '1.125rem',
+                    color: '#fff', marginBottom: 16,
+                }} className="mb-4">Quick Access</h2>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                    gap: 16,
+                }}>
+                    {quickLinks.map(({ to, icon: Icon, label, gradient, glow }) => (
+                        <Link
+                            key={to}
+                            to={to}
+                            className="dash-card group"
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <div className="dash-card-icon group-hover:scale-110 transition-transform duration-300" style={{
+                                background: gradient,
+                                boxShadow: `0 8px 24px ${glow}`,
+                            }}>
+                                <Icon size={24} color="#fff" />
+                            </div>
+                            <span className="dash-card-label" style={{ fontSize: '0.85rem', fontWeight: 600 }}>{label}</span>
+                        </Link>
+                    ))}
+                </div>
             </div>
 
-            {/* ── Bottom Grid: Membership + BMI ── */}
+            {/* ── Membership & BMI Section ── */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                 gap: 24,
-            }} className="member-bottom-grid">
+                width: '100%',
+            }}>
                 {/* Membership Status */}
-                <div style={{
-                    background: 'rgba(18,18,26,0.85)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: 16,
-                    padding: '28px 32px',
+                <div className="glass p-7 md:p-9" style={{
                     display: 'flex',
                     flexDirection: 'column',
+                    minHeight: '240px',
+                    justifyContent: 'space-between',
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                        <h3 style={{
-                            fontFamily: "'Outfit', sans-serif",
-                            fontWeight: 700, fontSize: '1.125rem',
-                            color: '#fff',
-                        }}>Membership Status</h3>
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, gap: 12, flexWrap: 'wrap' }}>
+                            <h3 style={{
+                                fontFamily: "'Outfit', sans-serif",
+                                fontWeight: 700, fontSize: '1.125rem',
+                                color: '#fff',
+                            }}>Membership Status</h3>
 
-                        {user?.membershipPlan && (
-                            <span style={{
-                                padding: '5px 14px', borderRadius: 10,
-                                fontSize: '0.7rem', fontWeight: 700,
-                                background: 'rgba(57,255,20,0.08)',
-                                color: '#39FF14',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.08em',
-                                border: '1px solid rgba(57,255,20,0.15)',
-                            }}>
-                                {user.membershipPlan}
-                            </span>
-                        )}
-                    </div>
+                            {user?.membershipPlan && (
+                                <span style={{
+                                    padding: '6px 16px', borderRadius: 8,
+                                    fontSize: '0.75rem', fontWeight: 700,
+                                    background: 'rgba(57,255,20,0.08)',
+                                    color: '#39FF14',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.08em',
+                                    border: '1px solid rgba(57,255,20,0.2)',
+                                    whiteSpace: 'nowrap',
+                                }}>
+                                    {user.membershipPlan}
+                                </span>
+                            )}
+                        </div>
 
-                    <div style={{
-                        flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                    }}>
                         <p style={{
                             fontSize: '0.85rem', color: '#88889a',
-                            marginBottom: 12, fontWeight: 500,
+                            marginBottom: 16, fontWeight: 500,
                         }}>
-                            {user?.membershipPlan ? 'Your plan expires in:' : 'No active plan'}
+                            {user?.membershipPlan ? 'Your plan expires in:' : 'No active membership plan'}
                         </p>
+                    </div>
+
+                    <div>
                         <CountdownTimer expiryDate={user?.membershipExpiry} />
                     </div>
                 </div>
 
                 {/* BMI Calculator */}
-                <BMICalculator />
+                <div style={{ width: '100%' }}>
+                    <BMICalculator />
+                </div>
             </div>
 
-            {/* Responsive fix for bottom grid */}
-            <style>{`
-                @media (min-width: 768px) {
-                    .member-bottom-grid { grid-template-columns: 1fr 1fr !important; }
-                }
-            `}</style>
+            {/* ── Additional Info Section ── */}
+            <div className="glass p-7 md:p-9">
+                <h3 style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontWeight: 700, fontSize: '1.125rem',
+                    color: '#fff', marginBottom: 16,
+                }}>Progress Tips</h3>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: 16,
+                }}>
+                    {[
+                        { icon: '🎯', title: 'Stay Consistent', desc: 'Complete your workouts regularly' },
+                        { icon: '💧', title: 'Stay Hydrated', desc: 'Drink water before, during & after' },
+                        { icon: '🥗', title: 'Eat Healthy', desc: 'Follow your assigned diet plan' },
+                    ].map((tip, idx) => (
+                        <div key={idx} style={{
+                            padding: '16px',
+                            background: 'rgba(57, 255, 20, 0.05)',
+                            border: '1px solid rgba(57, 255, 20, 0.1)',
+                            borderRadius: '12px',
+                            textAlign: 'center',
+                        }}>
+                            <div style={{ fontSize: '1.75rem', marginBottom: 8 }}>{tip.icon}</div>
+                            <h4 style={{
+                                fontFamily: "'Outfit', sans-serif",
+                                fontWeight: 600, fontSize: '0.95rem',
+                                color: '#fff', marginBottom: 4,
+                            }}>{tip.title}</h4>
+                            <p style={{ fontSize: '0.8rem', color: '#88889a' }}>{tip.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
